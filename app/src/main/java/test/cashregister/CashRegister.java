@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class CashRegister {
+    private static final String SORRY = "sorry";
     List<Denomination> denominations;
     public static void main(String[] args) {
         CashRegister cashRegister = new CashRegister();
@@ -20,19 +21,34 @@ public class CashRegister {
         String input = "";
         while (!(input = scanner.nextLine()).equals("quit")) {
             String[] inputArgs = input.split(" ");
-            switch(inputArgs[0]) {
-                case "show":
-                    cashRegister.showMessage();
-                    break;
-                case "put":
-                    cashRegister.put(Arrays.copyOfRange(inputArgs, 1, inputArgs.length));
-                    break;
-                case "take":
-                    cashRegister.take(Arrays.copyOfRange(inputArgs, 1, inputArgs.length));
-                    break;
-                case "change":
-                    cashRegister.change(inputArgs[1]);
-                    break;
+            try {
+                switch(inputArgs[0]) {
+                    case "show":
+                        cashRegister.showMessage();
+                        break;
+                    case "put":
+                        cashRegister.put(Arrays.copyOfRange(inputArgs, 1, inputArgs.length));
+                        break;
+                    case "take":
+                        cashRegister.take(Arrays.copyOfRange(inputArgs, 1, inputArgs.length));
+                        break;
+                    case "change":
+                        cashRegister.change(inputArgs[1]);
+                        break;
+                    case "help":
+                        System.out.println("Available Commands");
+                        System.out.println("===========================================================");
+                        System.out.println("show - show values in cash registry");
+                        System.out.println("put - put values in 5 cash register eg: put 1 2 3 4 5");
+                        System.out.println("take - take values in 5 cash register  eg: put 1 2 3 4 5");
+                        System.out.println("change - pull change from cash registry eg: change 1000");
+                        break;
+                    default: 
+                        System.out.println("Invalid command");
+                        
+                }
+            } catch (Exception nfx) {
+                System.out.println(String.format("Error: %s", nfx.getMessage()));
             }
         }
         
@@ -51,38 +67,40 @@ public class CashRegister {
         );
     }
 
-    public void put(String... inputs) throws NumberFormatException {
+    public void put(String... inputs) throws Exception {
         if (inputs.length!=5) {
-            throw new NumberFormatException("Invalid number of arguments supplied for put");
+            throw new Exception("Invalid number of arguments supplied for put");
+        }
+
+        if (Arrays.asList(inputs).stream().anyMatch(e->!e.matches("[0-9]+"))) {
+            throw new Exception(String.format("Invalid number supplied for put with values: %s", String.join(", ", inputs)));
         }
         for (int i=0; i < inputs.length; i++) {
             String val = inputs[i];
-            if (!val.matches("[0-9]+")) {
-                throw new NumberFormatException(String.format("Invalid number supplied for put at index: %s", val));
-            }
             denominations.get(i).addCount(Integer.parseInt(val));
         }
         showMessage();
     }
 
-    public void take(String... inputs) throws NumberFormatException {
+    public void take(String... inputs) throws Exception {
         if (inputs.length!=5) {
-            throw new NumberFormatException("Invalid number of arguments supplied for take");
+            throw new Exception("Invalid number of arguments supplied for take");
+        }
+
+        if (Arrays.asList(inputs).stream().anyMatch(e->!e.matches("[0-9]+"))) {
+            throw new Exception(String.format("Invalid number supplied for take with values: %s", String.join(", ", inputs)));
         }
         for (int i=0; i < inputs.length; i++) {
             String val = inputs[i];
-            if (!val.matches("[0-9]+")) {
-                throw new NumberFormatException(String.format("Invalid number supplied for put at index: %s", val));
-            }
             denominations.get(i).subtractCount(Integer.parseInt(val));
         }
         showMessage();
     }
 
-    public boolean change(String input) throws NumberFormatException {
+    public boolean change(String input) throws Exception {
         String val = input;
         if (input==null || !val.matches("[0-9]+")) {
-            throw new NumberFormatException("Invalid number supplied for change value");
+            throw new Exception(String.format("Invalid number supplied for change value: %s", input));
         }
 
         List<Denomination> registry = denominations.stream().map(d->new Denomination(d)).collect(Collectors.toList());
@@ -94,7 +112,7 @@ public class CashRegister {
         Map<Integer, Integer> results = new HashMap<Integer, Integer>();
 
         if (changeValue < 1 || initialTotal<changeValue) {
-            System.out.println("sorry");
+            System.out.println(SORRY);
             return false;
         }
         
@@ -128,7 +146,7 @@ public class CashRegister {
 
         boolean hasFailed = results.entrySet().stream().filter(e->initialDenominations.get(e.getKey()) < e.getValue()).count() > 0;
         if (hasFailed) {
-            System.out.println("Sorry");
+            System.out.println(SORRY);
             return false;
         } else {
             denominations.stream().forEach(d->d.setCount(d.getCount()-results.get(d.getValue())));

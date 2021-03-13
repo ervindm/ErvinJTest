@@ -14,7 +14,7 @@ public class CashRegisterTest {
     }
 
     @Test
-    public void testCashRegisterPutWithCorrectValues() {
+    public void testCashRegisterPutWithCorrectValues() throws Exception {
         CashRegister classUnderTest = new CashRegister();
         classUnderTest.initialize();
 
@@ -23,7 +23,7 @@ public class CashRegisterTest {
     }
 
     @Test
-    public void testCashRegisterTakeWithCorrectValues() {
+    public void testCashRegisterTakeWithCorrectValues() throws Exception {
         CashRegister classUnderTest = new CashRegister();
         classUnderTest.initialize();
 
@@ -32,7 +32,7 @@ public class CashRegisterTest {
     }
 
     @Test
-    public void testCashRegisterChangeWithCorrectValues() {
+    public void testCashRegisterChangeWithCorrectValues() throws Exception {
         CashRegister classUnderTest = new CashRegister();
         classUnderTest.initialize();
 
@@ -42,7 +42,7 @@ public class CashRegisterTest {
     }
 
     @Test
-    public void testCashRegisterChangeWithInvalidChange() {
+    public void testCashRegisterChangeWithInvalidChange() throws Exception {
         CashRegister classUnderTest = new CashRegister();
         classUnderTest.initialize();
 
@@ -51,7 +51,7 @@ public class CashRegisterTest {
     }
 
     @Test
-    public void testCashRegisterDefaultCase() {
+    public void testCashRegisterDefaultCase() throws Exception {
         CashRegister classUnderTest = new CashRegister();
         classUnderTest.initialize();
 
