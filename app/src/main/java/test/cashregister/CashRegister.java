@@ -39,9 +39,10 @@ public class CashRegister {
                         System.out.println("Available Commands");
                         System.out.println("===========================================================");
                         System.out.println("show - show values in cash registry");
-                        System.out.println("put - put values in 5 cash register eg: put 1 2 3 4 5");
-                        System.out.println("take - take values in 5 cash register  eg: put 1 2 3 4 5");
+                        System.out.println("put - put 5 values in cash register eg: put 1 2 3 4 5");
+                        System.out.println("take - take 5 values in cash register  eg: put 1 2 3 4 5");
                         System.out.println("change - pull change from cash registry eg: change 1000");
+                        System.out.println("quit - quit this cash register application");
                         break;
                     default: 
                         System.out.println("Invalid command");
