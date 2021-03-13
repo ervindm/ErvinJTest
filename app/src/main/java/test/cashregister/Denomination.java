@@ -23,21 +23,19 @@ public class Denomination {
         return value;
     }
 
-    public DispenseResult countDispensableFromValue(int fromValue) {
+    public int countDispensableFromValue(int fromValue) {
         if (count==0) {
-            return null;
+            return -1;
         }
-        int result = Math.round(fromValue / value);
-        int resultRemainder = fromValue % value;
-        return new DispenseResult(result, resultRemainder);
+        return Math.round(fromValue / value);
     }
 
-    public boolean deductDispensable(DispenseResult dispense) {
-        int result = count - dispense.count;
+    public boolean deductDispensable(int dispenseCount) {
+        int result = count - dispenseCount;
         if (result < 0) {
             return false;
         }
-        count -= dispense.count;
+        count -= dispenseCount;
         return true;
     }
 

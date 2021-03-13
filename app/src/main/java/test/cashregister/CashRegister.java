@@ -105,13 +105,13 @@ public class CashRegister {
 
         for (int i=0; i < registry.size(); i++) {
             Denomination denomination = registry.get(i);
-            DispenseResult dispense = denomination.countDispensableFromValue(currentValue);
-            boolean hasDeduction = dispense != null && dispense.count > 0;
+            int dispenseCount = denomination.countDispensableFromValue(currentValue);
+            boolean hasDeduction = dispenseCount != -1 && dispenseCount > 0;
             if (hasDeduction) {
                 lastDispensedIndex = i;
-                results.put(denomination.getValue(), dispense.count);
-                denomination.deductDispensable(dispense);
-                currentValue -= (dispense.count * denomination.getValue());
+                results.put(denomination.getValue(), dispenseCount);
+                denomination.deductDispensable(dispenseCount);
+                currentValue -= (dispenseCount * denomination.getValue());
             } else {
                 results.put(denomination.getValue(), 0);
             }
