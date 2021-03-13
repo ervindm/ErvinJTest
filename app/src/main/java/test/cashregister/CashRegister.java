@@ -85,7 +85,8 @@ public class CashRegister {
             throw new NumberFormatException("Invalid number supplied for change value");
         }
 
-        int initialTotal = denominations.stream()
+        List<Denomination> registry = denominations.stream().map(d->new Denomination(d)).collect(Collectors.toList());
+        int initialTotal = registry.stream()
             .mapToInt(d->d.calculate())
             .sum();
 
@@ -99,11 +100,11 @@ public class CashRegister {
         
         int lastDispensedIndex = -1;
         int currentValue = changeValue;
-        Map<Integer, Integer> initialDenominations = denominations.stream()
+        Map<Integer, Integer> initialDenominations = registry.stream()
                 .collect(Collectors.toMap(Denomination::getValue, Denomination::getCount));
 
-        for (int i=0; i < denominations.size(); i++) {
-            Denomination denomination = denominations.get(i);
+        for (int i=0; i < registry.size(); i++) {
+            Denomination denomination = registry.get(i);
             DispenseResult dispense = denomination.countDispensableFromValue(currentValue);
             boolean hasDeduction = dispense != null && dispense.count > 0;
             if (hasDeduction) {
@@ -130,6 +131,7 @@ public class CashRegister {
             System.out.println("Sorry");
             return false;
         } else {
+            denominations.stream().forEach(d->d.setCount(d.getCount()-results.get(d.getValue())));
             System.out.println(String.join(" ", results.values().stream().map(e->Integer.toString(e)).collect(Collectors.toList())));
             return true;
         }

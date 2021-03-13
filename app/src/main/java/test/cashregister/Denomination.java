@@ -9,6 +9,11 @@ public class Denomination {
     private int value;
     private int count;
 
+    public Denomination(Denomination d) {
+        this.value = d.getValue();
+        this.count = d.getCount();
+    }
+
     public Denomination(int value, int startCount) {
         this.value = value;
         this.count = startCount;
@@ -71,5 +76,4 @@ public class Denomination {
         return Objects.hash(value, count);
     }
 
-    
 }
